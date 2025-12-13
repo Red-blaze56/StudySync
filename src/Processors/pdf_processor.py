@@ -30,6 +30,7 @@ def _extract_text_from_ocr(pdf_path: Path) -> List[Document]:
     text = ocr_pdf(pdf_path)
 
     if not text.strip():
+        #text = pytesseract_ocr_pdf(pdf_path)      --to be added as a fail safe in future
         return []
     
     return [
