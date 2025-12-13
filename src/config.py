@@ -36,5 +36,5 @@ CHUNK_OVERLAP = 120
 TOP_K_RESULTS = 6
 
 # ---------- Models ----------
-LLM_MODEL = "gemini-1.5-flash"
+LLM_MODEL = "gemini-2.0-flash"
 EMBEDDING_MODEL = "bge-large-en"
