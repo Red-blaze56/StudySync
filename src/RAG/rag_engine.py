@@ -2,50 +2,33 @@ from typing import List
 from langchain_core.documents import Document
 from google.genai import types
 
-
 class RAGEngine:
-    def __init__(self, vectordb):
-        self.retriever = vectordb.as_retriever(
-            search_type="mmr",
-            search_kwargs={"k": 6}
-        )
+    def __init__(self, chroma_store):
+        self.store = chroma_store
 
-    def _build_context(self, docs: List[Document]) -> str:
-        return "\n\n".join(
-            f"[Source: {d.metadata.get('file_name', 'unknown')}]\n{d.page_content}"
-            for d in docs
-        )
+    def build_context(self, docs, max_chars: int = 6000) -> str:
+        context = ""
+        for i, doc in enumerate(docs):
+            if len(context) >= max_chars:
+                break
+            context += f"[Chunk {i+1}]\n{doc.page_content}\n\n"
+        return context.strip()
 
-    def answer(self, question: str, client, model_name: str) -> str:
-        docs = self.retriever.invoke(question)
+        
+    def retrieve(self, query: str, k: int = 6) -> List[Document]:
+        return self.store.mmr_search(query=query, k=k, fetch_k=20)
 
-        if not docs:
-            return "I don't know. The information is not available in the provided material."
-
-        context = self._build_context(docs)
-
-        user_prompt = f"""
+    def build_prompt(self, question: str, context: str) -> str:
+        return f"""
 Context:
 {context}
 
-Question: {question}
+Question:
+{question}
 
 Answer clearly and concisely using ONLY the context above.
-"""
+If the answer is not in the context, say you don't know.
+""".strip()
 
-        config = types.GenerateContentConfig(
-            system_instruction=(
-                "You are a helpful study assistant for students. "
-                "Use ONLY the provided context to answer the question. "
-                "If the answer is not in the context, say you don't know."
-            ),
-            temperature=0.0,
-        )
 
-        response = client.models.generate_content(
-            model=model_name,
-            contents=[user_prompt],
-            config=config,
-        )
 
-        return response.text.strip()

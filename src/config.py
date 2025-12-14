@@ -31,9 +31,9 @@ IMAGE_FORMATS = {".jpg", ".jpeg", ".png"}
 PDF_FORMATS = {".pdf"}
 
 # ---------- Chunking / RAG ----------
-CHUNK_SIZE = 900
-CHUNK_OVERLAP = 120
-TOP_K_RESULTS = 6
+CHUNK_SIZE = 600
+CHUNK_OVERLAP = 80
+TOP_K_RESULTS = 4
 
 # ---------- Models ----------
 LLM_MODEL = "gemini-2.0-flash"

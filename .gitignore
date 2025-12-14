@@ -9,3 +9,13 @@ wheels/
 # Virtual environments
 .venv
 .env
+
+# Vector stores
+chroma_db/
+*.sqlite
+*.parquet
+
+# Local artifacts
+outputs/
+tmp/
+.cache/
