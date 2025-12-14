@@ -10,6 +10,8 @@ from src.VectorStore.chroma_store import ChromaStore
 from src.Processors.pdf_processor import load_pdf
 from src.Chunking.factory import get_chunker
 
+from src.config import RAG_SYSTEM_INSTRUCTION
+
 
 load_dotenv()
 API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -50,11 +52,13 @@ def test_rag():
             prompt=prompt,
             client=client,
             model_name="gemini-2.0-flash",
+            system_instruction=RAG_SYSTEM_INSTRUCTION,
         )
     else:
         answer = generator.generate_offline(
             prompt=prompt,
             model="qwen2.5:7b-instruct",
+            system_instruction=RAG_SYSTEM_INSTRUCTION,
         )
 
     print("QUESTION:", question)

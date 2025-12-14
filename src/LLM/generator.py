@@ -3,13 +3,9 @@ from google.genai import types
 
 
 class Generator:
-    def generate_online(self, prompt: str, client, model_name: str) -> str:
+    def generate_online(self, prompt: str, client, model_name: str, system_instruction: str) -> str:
         config = types.GenerateContentConfig(
-            system_instruction=(
-                "You are a helpful study assistant. "
-                "Use ONLY the provided context. "
-                "If the answer is not in the context, say you don't know."
-            ),
+            system_instruction=(system_instruction),
             temperature=0.0,
         )
 
@@ -21,12 +17,8 @@ class Generator:
 
         return response.text.strip()
 
-    def generate_offline(self, prompt: str, model: str, url: str = "http://localhost:11434/api/generate") -> str:
-        system_instruction = (
-            "You are a helpful study assistant for students. "
-            "Use ONLY the provided context to answer the question. "
-            "If the answer is not in the context, say you don't know."
-        )
+    def generate_offline(self, prompt: str, system_instruction: str, model: str, url: str = "http://localhost:11434/api/generate") -> str:
+        system_instruction = (system_instruction)
 
         payload = {
             "model": model,
