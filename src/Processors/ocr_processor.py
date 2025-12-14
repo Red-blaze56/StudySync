@@ -1,7 +1,7 @@
 from google import genai
 from google.genai import types
 from pathlib import Path
-from config import LLM_MODEL
+from src.config import LLM_MODEL
 
 import os,time
 
