@@ -15,8 +15,8 @@ class RAGEngine:
         return context.strip()
 
         
-    def retrieve(self, query: str, k: int = 6) -> List[Document]:
-        return self.store.mmr_search(query=query, k=k, fetch_k=20)
+    def retrieve(self, query: str, k: int = 4) -> List[Document]:
+        return self.store.mmr_search(query=query, k=k, fetch_k=12)
 
     def build_prompt(self, question: str, context: str) -> str:
         return f"""

@@ -27,7 +27,7 @@ class ChromaStore:
     def similarity_search(self, query: str, k: int = 6) -> List[Document]:
         return self.store.similarity_search(query, k=k)
 
-    def mmr_search(self, query: str, k: int = 6, fetch_k: int = 20) -> List[Document]:
+    def mmr_search(self, query: str, k: int = 4, fetch_k: int = 12) -> List[Document]:
         return self.store.max_marginal_relevance_search(
             query=query,
             k=k,
