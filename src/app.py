@@ -12,6 +12,7 @@ from src.VectorStore.chroma_store import ChromaStore
 from src.RAG.rag_engine import RAGEngine
 from src.Summarizer.summarizer import Summarizer
 from src.LLM.generator import Generator
+from src.config import RAG_SYSTEM_INSTRUCTION
 
 from google import genai
 from dotenv import load_dotenv
@@ -113,20 +114,33 @@ if uploaded_files:
     # ==========================
     with tab1:
         rag = RAGEngine(store)
+        generator = Generator()
         question = st.text_input("Ask a question from your materials:")
 
-        if st.button("Get Answer") and question:
-            with st.spinner("Thinking..."):
-                answer = rag.answer(
-                    question=question,
-                    mode=mode,
-                    client=client,
-                    model_name=gemini_model,
-                    ollama_model=ollama_model,
-                )
+        retrieved_docs = rag.retrieve(question)
 
-            st.markdown("### Answer")
-            st.write(answer)
+        if not retrieved_docs:
+            st.warning("I don't know. No relevant material found.")
+            st.stop()
+
+        context = rag.build_context(retrieved_docs)
+        prompt = rag.build_prompt(question, context)
+
+        if mode == "ONLINE":
+            answer = generator.generate_online(
+                prompt=prompt,
+                client=client,
+                model_name=gemini_model,
+                system_instruction=RAG_SYSTEM_INSTRUCTION,
+            )
+        else:
+            answer = generator.generate_offline(
+                prompt=prompt,
+                model=ollama_model,
+                system_instruction=RAG_SYSTEM_INSTRUCTION
+            )
+
+        st.write(answer)
 
     # ==========================
     # SUMMARIZER TAB
