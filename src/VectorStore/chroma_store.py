@@ -23,6 +23,9 @@ class ChromaStore:
             return
         self.store.add_documents(docs)
 
+    def reset(self):
+        self.store._collection.delete()
+
     #----------types of searching--------------
     def similarity_search(self, query: str, k: int = 6) -> List[Document]:
         return self.store.similarity_search(query, k=k)
