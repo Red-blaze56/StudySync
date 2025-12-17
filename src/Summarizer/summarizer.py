@@ -57,7 +57,16 @@ Focus on key concepts and definitions.
     # --------------------------------------------------
     # generate study guide
     # --------------------------------------------------
-    def generate_study_guide(self, mode: str,client=None,model_name: str = None,ollama_model: str = None,where: Optional[dict] = None) -> str:
+    def generate_study_guide(
+            self,
+            mode: str,
+            client=None,
+            model_name: str = None,
+            ollama_model: str = None,
+            where: Optional[dict] = None,
+            progress_callback=None,               # added so we can see which batch is being loaded in the frontend
+            ) -> str:
+        
         docs = self._fetch_docs(where=where)
         docs = sorted(
             docs,
@@ -74,6 +83,9 @@ Focus on key concepts and definitions.
 
         partial_summaries = []
         for idx, batch in enumerate(batches):
+            if progress_callback:
+                progress_callback(f"Summarizing batch {idx+1}/{len(batches)}")
+
             try:
                 summary = self._summarize_batch(
                     batch,

@@ -42,11 +42,9 @@ def test_rag():
         print("I don't know")
         return
 
-    # 5. Build context + prompt
     context = rag.build_context(retrieved_docs)
     prompt = rag.build_prompt(question, context)
 
-    # 6. Generate
     if mode == "ONLINE":
         answer = generator.generate_online(
             prompt=prompt,
@@ -65,7 +63,6 @@ def test_rag():
     print("=" * 60)
     print("ANSWER:\n", answer)
 
-    # Debug check
     results = store.similarity_search("retrieval augmented generation", k=3)
     print("Retrieved docs:", len(results))
 

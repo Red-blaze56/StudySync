@@ -29,7 +29,7 @@ class OllamaLLM:
             },
         }
 
-        response = requests.post(url, json=payload, timeout=120)
+        response = requests.post(url, json=payload, timeout=None)
 
         if response.status_code != 200:
             raise RuntimeError(

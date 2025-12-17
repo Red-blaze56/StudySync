@@ -17,6 +17,15 @@ class RAGEngine:
         
     def retrieve(self, query: str, k: int = 4) -> List[Document]:
         return self.store.mmr_search(query=query, k=k, fetch_k=12)
+        '''sources = [
+        {
+            "file": d.metadata.get("file_name"),
+            "page": d.metadata.get("page", 0) + 1
+        }
+        for d in docs
+        ]
+
+        return docs, sources'''
 
     def build_prompt(self, question: str, context: str) -> str:
         return f"""

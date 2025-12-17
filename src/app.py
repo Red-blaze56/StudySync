@@ -100,6 +100,7 @@ if uploaded_files:
     chunks = chunker.chunk(all_docs)
 
     store = ChromaStore()
+    #store.reset() #deleting previous loaded docs in new session
     store.add_documents(chunks)
 
     st.success(f"Ingested {len(chunks)} chunks into knowledge base.")
@@ -151,6 +152,12 @@ if uploaded_files:
             generator=Generator(),
         )
 
+        progress_area = st.empty()
+
+        def update_progress(msg):
+            progress_area.info(msg)
+
+
         if st.button("Generate Study Guide"):
             with st.spinner("Generating study guide..."):
                 guide = summarizer.generate_study_guide(
@@ -158,6 +165,7 @@ if uploaded_files:
                     client=client,
                     model_name=gemini_model,
                     ollama_model=ollama_model,
+                    progress_callback=update_progress
                 )
 
             st.markdown("### 📘 Study Guide")

@@ -27,7 +27,8 @@ class Generator:
             "system": system_instruction,
             "options": {
                 "temperature": 0.0,
-                "num_ctx": 4096,
+                "num_ctx": 2048,
+                "num_predict":300
             },
         }
 
