@@ -57,7 +57,7 @@ def _has_sufficient_text(pdf_path: Path) ->bool:
 
         avg_chars = total_chars / max(pages_to_check, 1)
 
-        return avg_chars >= 40
+        return avg_chars >= 120
     except Exception:
         return False
     

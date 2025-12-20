@@ -100,13 +100,13 @@ if uploaded_files:
     chunks = chunker.chunk(all_docs)
 
     store = ChromaStore()
-    #store.reset() #deleting previous loaded docs in new session
+    #store.reset() #deleting previous loaded docs in new session - to be updated not working right now
     store.add_documents(chunks)
 
     st.success(f"Ingested {len(chunks)} chunks into knowledge base.")
 
     # --------------------------------------------------
-    # Tabs: RAG | Summarizer
+    # Tabs: RAG and Summarizer
     # --------------------------------------------------
     tab1, tab2 = st.tabs(["🔍 Ask Questions", "📘 Study Guide"])
 
@@ -118,6 +118,7 @@ if uploaded_files:
         generator = Generator()
         question = st.text_input("Ask a question from your materials:")
 
+    
         retrieved_docs = rag.retrieve(question)
 
         if not retrieved_docs:
